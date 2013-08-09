@@ -35,7 +35,7 @@ iris.resource(function(self) {
         }
     };
 
-    self.add = function(text) {
+    self.addTodo = function(text) {
         var todo = {id: String(new Date().getTime()), text: text, completed: false};
         todos[todo.id] = todo;
         saveTodo(todo);
@@ -55,12 +55,12 @@ iris.resource(function(self) {
 
     self.remove = function(id) {
         removeTodo(todos[id]);
-        iris.notify(self.DESTR0Y_TODO, id);
+        iris.notify(self.DESTROY_TODO, id);
     };
 
     self.toggle = function(id) {
         var todo = todos[id];
-        todo.completed = false;
+        todo.completed = !todo.completed;
 
         if (todo.completed) {
             --remaining;
@@ -73,8 +73,8 @@ iris.resource(function(self) {
     };
 
     self.removeCompleted = function() {
-        for (var i = 0; i < todos.length; i++ ) {
-            var todo = todos[i];
+        for (var id in todos) {
+            var todo = todos[id];
             if (todo.completed) {
                 removeTodo(todo);
                 iris.notify(self.DESTROY_TODO, todo.id);
